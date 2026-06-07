@@ -6,6 +6,8 @@ visibility=public
 description=[h1]Proximity Inventory[/h1]
 Loot like a vacuum cleaner — one tab that scoops up every container around you.
 
+[i]Like this? Also grab [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3740163599]Safehouse Inventory[/url] — and [url=https://github.com/DevL0rd/Zomboid-ProximityInventory]contribute / report bugs on GitHub[/url].[/i]
+
 [b]Proximity Inventory[/b] adds a single tab to the loot window that merges every nearby container into one list: crates, shelves, corpses, car boots, the floor. Stop clicking through fifteen cupboards — grab everything from one place.
 
 [h2]What it does[/h2]
