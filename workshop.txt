@@ -26,4 +26,5 @@ Clearing a house, a gas station, or a fresh pile of zombies? Everything in arm's
 Works with vanilla and is friendly with CleanUI. Single-player and multiplayer both supported.
 
 [hr][/hr]
+[i]Open source (GPL-3.0) — modify it freely, just send your fixes back to the GitHub repo above instead of re-uploading your own copy. Keeps everyone on one version.[/i]
 A community fork, kept simple. Found a bug or have an idea? Drop a comment below!

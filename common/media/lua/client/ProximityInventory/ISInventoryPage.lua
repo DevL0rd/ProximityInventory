@@ -30,24 +30,14 @@ function ISInventoryPage:onBackpackRightMouseDown(x, y)
   return old_ISInventoryPage_onBackpackRightMouseDown(self, x, y)
 end
 
--- Sticky selection, handled generically: a real container becomes the selection through
--- selectContainer() -- clicking a tab in the UI (onBackpackClick), the scroll wheel, keyboard
--- prev/next -- and that releases the proxInv tab.
+-- Sticky selection: selecting any real container through selectContainer() -- a UI tab click
+-- (onBackpackClick), a world-container click, the scroll wheel, keyboard prev/next -- releases the
+-- proxInv tab; selecting the proxInv tab locks it.
 --
--- EXCEPTION: looting an item from the proxInv tab makes the game re-select the item's *source*
--- container via selectButtonForContainer() (ISInventoryTransferAction). That's not the player
--- choosing a tab, so we must NOT release the tab then. selectButtonForContainer is only used by
--- transfer actions / vehicle doors (never by genuine tab/world clicks), so we flag those calls and
--- skip the sticky update while one is in progress.
-local old_ISInventoryPage_selectButtonForContainer = ISInventoryPage.selectButtonForContainer
-function ISInventoryPage:selectButtonForContainer(container)
-  self._proxInvProgrammatic = true
-  local ok, ret = pcall(old_ISInventoryPage_selectButtonForContainer, self, container)
-  self._proxInvProgrammatic = false
-  if not ok then error(ret) end
-  return ret
-end
-
+-- EXCEPTION: while you take items from the proxInv tab, ISInventoryTransferAction keeps re-selecting
+-- the item's source container (its update()/perform() call selectButtonForContainer). That's not the
+-- player choosing a tab. We flag the loot page only for the duration of those transfer methods and
+-- skip the release while flagged -- genuine selections aren't inside a transfer, so they're untouched.
 local old_ISInventoryPage_selectContainer = ISInventoryPage.selectContainer
 function ISInventoryPage:selectContainer(button)
   if button and button.inventory and not self._proxInvProgrammatic then
@@ -58,6 +48,20 @@ function ISInventoryPage:selectContainer(button)
 
   return old_ISInventoryPage_selectContainer(self, button)
 end
+
+local function proxInvRunGuarded(action, orig)
+  local loot = getPlayerLoot and action.character and getPlayerLoot(action.character:getPlayerNum())
+  if loot then loot._proxInvProgrammatic = true end
+  local ok, err = pcall(orig, action)
+  if loot then loot._proxInvProgrammatic = false end
+  if not ok then error(err, 0) end
+end
+
+local old_ISInventoryTransferAction_update = ISInventoryTransferAction.update
+function ISInventoryTransferAction:update() proxInvRunGuarded(self, old_ISInventoryTransferAction_update) end
+
+local old_ISInventoryTransferAction_perform = ISInventoryTransferAction.perform
+function ISInventoryTransferAction:perform() proxInvRunGuarded(self, old_ISInventoryTransferAction_perform) end
 
 local old_ISInventoryPage_update = ISInventoryPage.update
 function ISInventoryPage:update()
