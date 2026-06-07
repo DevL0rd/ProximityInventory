@@ -1,7 +1,7 @@
 version=1
 id=3740165370
 title=Proximity Inventory
-tags=Build 42;Interface;Multiplayer
+tags=Build 42;Interface;Misc;Multiplayer;QoL
 visibility=public
 description=[h1]Proximity Inventory[/h1]
 Loot like a vacuum cleaner — one tab that scoops up every container around you.
