@@ -1,0 +1,25 @@
+version=1
+id=3740165370
+title=Proximity Inventory
+tags=Build 42;Interface;Multiplayer
+visibility=public
+description=[h1]Proximity Inventory[/h1]
+Loot like a vacuum cleaner — one tab that scoops up every container around you.
+
+[b]Proximity Inventory[/b] adds a single tab to the loot window that merges every nearby container into one list: crates, shelves, corpses, car boots, the floor. Stop clicking through fifteen cupboards — grab everything from one place.
+
+[h2]What it does[/h2]
+[list]
+[*][b]One tab, everything nearby.[/b] All the containers in reach, merged into a single inventory.
+[*][b]Stays put.[/b] The tab keeps itself selected as you move and glance at other containers — it only switches when you actually click a different one. (This fork drops the old force-select pin.)
+[*][b]Spot the source.[/b] Optional highlighting of the real containers a nearby item is sitting in.
+[/list]
+
+[h2]Why you'll like it[/h2]
+Clearing a house, a gas station, or a fresh pile of zombies? Everything in arm's reach shows up in one tidy list, so you can scoop, sort, and bail faster.
+
+[h2]Plays nice[/h2]
+Works with vanilla and is friendly with CleanUI. Single-player and multiplayer both supported.
+
+[hr][/hr]
+A community fork, kept simple. Found a bug or have an idea? Drop a comment below!

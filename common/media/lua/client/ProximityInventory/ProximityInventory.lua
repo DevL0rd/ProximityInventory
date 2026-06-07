@@ -151,10 +151,7 @@ local function patchMouseWheel(invSelf, playerNum)
     end
 
     if unlockedIndex ~= -1 then
-      local targetContainer = self.backpacks[unlockedIndex].inventory
-      -- scrolling onto/off the proxInv tab updates the sticky selection
-      ProximityInventory.stickSelected[playerNum] =
-        (targetContainer == ProximityInventory.itemContainer[playerNum]) or nil
+      -- selectContainer() updates the sticky selection generically (see ISInventoryPage.lua)
       self:selectContainer(self.backpacks[unlockedIndex])
     end
 

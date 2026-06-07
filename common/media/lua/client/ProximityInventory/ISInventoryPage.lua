@@ -30,19 +30,21 @@ function ISInventoryPage:onBackpackRightMouseDown(x, y)
   return old_ISInventoryPage_onBackpackRightMouseDown(self, x, y)
 end
 
-local old_ISInventoryPage_onBackpackMouseDown = ISInventoryPage.onBackpackMouseDown
-function ISInventoryPage:onBackpackMouseDown(button, x, y)
-  local clickedContainer = button and button.inventory
-
-  -- Sticky selection: clicking the proxInv tab keeps it selected across refreshes;
-  -- clicking any real container releases it.
-  if clickedContainer then
+-- Sticky selection, handled generically: every way a container becomes selected routes
+-- through selectContainer() -- clicking a tab in the UI (onBackpackClick), clicking a
+-- container in the WORLD (ISInventoryTransferAction -> selectButtonForContainer), the
+-- scroll wheel, and keyboard prev/next. Hooking here (instead of onBackpackMouseDown,
+-- which only fires for UI tab clicks) means selecting a real container ALWAYS releases
+-- the proxInv tab, no matter how the selection was made.
+local old_ISInventoryPage_selectContainer = ISInventoryPage.selectContainer
+function ISInventoryPage:selectContainer(button)
+  if button and button.inventory then
     local playerNum = self.player or 0
     ProximityInventory.stickSelected[playerNum] =
-      (clickedContainer:getType() == "proxInv") or nil
+      (button.inventory:getType() == "proxInv") or nil
   end
 
-  return old_ISInventoryPage_onBackpackMouseDown(self, button, x, y)
+  return old_ISInventoryPage_selectContainer(self, button)
 end
 
 local old_ISInventoryPage_update = ISInventoryPage.update
