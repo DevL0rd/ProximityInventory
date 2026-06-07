@@ -22,7 +22,7 @@ rsync -a --delete \
   "$REPO_DIR/" "$DEST/"
 
 # Steam preview image (shown on the Workshop page / in the uploader).
-cp -f "$REPO_DIR/common/poster.png" "$WS/preview.png"
+cp -f "$REPO_DIR/42/poster.png" "$WS/preview.png"
 
 # workshop.txt (title, tags, visibility, published id, description) is the canonical metadata kept
 # in the repo. Copy it straight over so edits publish on the next in-game upload.

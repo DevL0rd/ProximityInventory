@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "近接インベントリ",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "「近接インベントリ」のオン/オフ",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "「強制選択」のオン/オフ",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "近接インベントリが使用するコンテナを強調表示",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "近接インベントリを有効にする"
+}

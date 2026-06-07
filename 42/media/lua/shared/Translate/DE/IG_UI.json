@@ -1,0 +1,13 @@
+{
+    "IGUI_ProxInv_Text_ForceSelectOn": "Erzwungene Auswahl: AN",
+    "IGUI_ProxInv_Text_ForceSelectOff": "Erzwungene Auswahl: AUS",
+    "IGUI_ProxInv_InventoryName": "Umgebungsinv.",
+    "IGUI_ProxInv_Tooltip_ToggleOn": "Rechtsklick für Einstellungen",
+    "IGUI_ProxInv_Tooltip_ToggleOff": "Deaktiviert - Rechtsklick für Einstellungen",
+    "IGUI_ProxInv_Context_ToggleOn": "Ausschalten",
+    "IGUI_ProxInv_Context_ToggleOff": "Einschalten",
+    "IGUI_ProxInv_Context_ForceSelectOn": "Erzwungene Auswahl deaktivieren",
+    "IGUI_ProxInv_Context_ForceSelectOff": "Erzwungene Auswahl aktivieren",
+    "IGUI_ProxInv_Context_HighlightOn": "Hervorhebung deaktivieren",
+    "IGUI_ProxInv_Context_HighlightOff": "Hervorhebung aktivieren"
+}

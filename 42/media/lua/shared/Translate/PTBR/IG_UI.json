@@ -1,0 +1,13 @@
+{
+    "IGUI_ProxInv_Text_ForceSelectOn": "Seleção forçada: LIGADA",
+    "IGUI_ProxInv_Text_ForceSelectOff": "Seleção forçada: DESLIGADA",
+    "IGUI_ProxInv_InventoryName": "Inv. de proximidade",
+    "IGUI_ProxInv_Tooltip_ToggleOn": "Clique com o botão direito para configurar",
+    "IGUI_ProxInv_Tooltip_ToggleOff": "Desativado - Clique com o botão direito para configurar",
+    "IGUI_ProxInv_Context_ToggleOn": "Desativar",
+    "IGUI_ProxInv_Context_ToggleOff": "Ativar",
+    "IGUI_ProxInv_Context_ForceSelectOn": "Desativar seleção forçada",
+    "IGUI_ProxInv_Context_ForceSelectOff": "Ativar seleção forçada",
+    "IGUI_ProxInv_Context_HighlightOn": "Desativar destaque",
+    "IGUI_ProxInv_Context_HighlightOff": "Ativar destaque"
+}

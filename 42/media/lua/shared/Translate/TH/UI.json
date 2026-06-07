@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "คลังของใกล้ตัว",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "เปิด/ปิด 'คลังของใกล้ตัว'",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "เปิด/ปิด 'บังคับเลือก'",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "ไฮไลต์ภาชนะที่คลังของใกล้ตัวใช้งาน",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "เปิดใช้งานคลังของใกล้ตัว"
+}

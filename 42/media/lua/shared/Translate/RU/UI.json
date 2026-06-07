@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "Инвентарь поблизости",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "Вкл./выкл. «Инвентарь поблизости»",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "Вкл./выкл. «Принудительный выбор»",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "Подсвечивать контейнеры, используемые инвентарём поблизости",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "Включить инвентарь поблизости"
+}

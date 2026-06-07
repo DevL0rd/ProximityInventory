@@ -1,0 +1,13 @@
+{
+    "IGUI_ProxInv_Text_ForceSelectOn": "บังคับเลือก: เปิด",
+    "IGUI_ProxInv_Text_ForceSelectOff": "บังคับเลือก: ปิด",
+    "IGUI_ProxInv_InventoryName": "คลังใกล้ตัว",
+    "IGUI_ProxInv_Tooltip_ToggleOn": "คลิกขวาเพื่อตั้งค่า",
+    "IGUI_ProxInv_Tooltip_ToggleOff": "ปิดอยู่ - คลิกขวาเพื่อตั้งค่า",
+    "IGUI_ProxInv_Context_ToggleOn": "ปิด",
+    "IGUI_ProxInv_Context_ToggleOff": "เปิด",
+    "IGUI_ProxInv_Context_ForceSelectOn": "ปิดบังคับเลือก",
+    "IGUI_ProxInv_Context_ForceSelectOff": "เปิดบังคับเลือก",
+    "IGUI_ProxInv_Context_HighlightOn": "ปิดไฮไลต์",
+    "IGUI_ProxInv_Context_HighlightOff": "เปิดไฮไลต์"
+}

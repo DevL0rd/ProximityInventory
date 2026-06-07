@@ -1,0 +1,13 @@
+{
+    "IGUI_ProxInv_Text_ForceSelectOn": "Принуд. выбор: ВКЛ",
+    "IGUI_ProxInv_Text_ForceSelectOff": "Принуд. выбор: ВЫКЛ",
+    "IGUI_ProxInv_InventoryName": "Инв. поблизости",
+    "IGUI_ProxInv_Tooltip_ToggleOn": "ПКМ для настроек",
+    "IGUI_ProxInv_Tooltip_ToggleOff": "Отключено - ПКМ для настроек",
+    "IGUI_ProxInv_Context_ToggleOn": "Выключить",
+    "IGUI_ProxInv_Context_ToggleOff": "Включить",
+    "IGUI_ProxInv_Context_ForceSelectOn": "Отключить принуд. выбор",
+    "IGUI_ProxInv_Context_ForceSelectOff": "Включить принуд. выбор",
+    "IGUI_ProxInv_Context_HighlightOn": "Отключить подсветку",
+    "IGUI_ProxInv_Context_HighlightOff": "Включить подсветку"
+}

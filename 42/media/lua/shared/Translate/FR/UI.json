@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "Inventaire de proximité",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "Activer/désactiver « Inventaire de proximité »",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "Activer/désactiver « Sélection forcée »",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "Surligner les conteneurs utilisés par l'inventaire de proximité",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "Activer l'Inventaire de proximité"
+}

@@ -1,0 +1,13 @@
+{
+    "IGUI_ProxInv_Text_ForceSelectOn": "강제 선택: 켜짐",
+    "IGUI_ProxInv_Text_ForceSelectOff": "강제 선택: 꺼짐",
+    "IGUI_ProxInv_InventoryName": "근접 보관함",
+    "IGUI_ProxInv_Tooltip_ToggleOn": "우클릭하여 설정",
+    "IGUI_ProxInv_Tooltip_ToggleOff": "비활성화됨 - 우클릭하여 설정",
+    "IGUI_ProxInv_Context_ToggleOn": "끄기",
+    "IGUI_ProxInv_Context_ToggleOff": "켜기",
+    "IGUI_ProxInv_Context_ForceSelectOn": "강제 선택 비활성화",
+    "IGUI_ProxInv_Context_ForceSelectOff": "강제 선택 활성화",
+    "IGUI_ProxInv_Context_HighlightOn": "강조 표시 비활성화",
+    "IGUI_ProxInv_Context_HighlightOff": "강조 표시 활성화"
+}

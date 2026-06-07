@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "Yakınlık Envanteri",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "'Yakınlık Envanteri'ni aç/kapat",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "'Zorla Seçim'i aç/kapat",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "Yakınlık envanterinin kullandığı kapları vurgula",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "Yakınlık Envanterini etkinleştir"
+}

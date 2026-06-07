@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "근접 보관함",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "'근접 보관함' 켜기/끄기",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "'강제 선택' 켜기/끄기",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "근접 보관함이 사용하는 컨테이너 강조 표시",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "근접 보관함 활성화"
+}

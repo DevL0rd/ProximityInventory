@@ -1,4 +1,0 @@
-UI_EN = {
-	UI_optionscreen_binding_ProximityInventory = "Proximity Inventory",
-  UI_optionscreen_binding_ProxInv_Force_Selected = "Force Selected Key",
-}

@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "Umgebungsinventar",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "„Umgebungsinventar“ ein-/ausschalten",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "„Erzwungene Auswahl“ ein-/ausschalten",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "Vom Umgebungsinventar genutzte Behälter hervorheben",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "Umgebungsinventar aktivieren"
+}

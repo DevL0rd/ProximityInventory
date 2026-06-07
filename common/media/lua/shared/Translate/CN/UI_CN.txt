@@ -1,4 +1,0 @@
-UI_CN = {
-    UI_optionscreen_binding_ProximityInventory = "融合物品栏",
-    UI_optionscreen_binding_ProxInv_Force_Selected = "开/关强制选中",
-}

@@ -1,0 +1,13 @@
+{
+    "IGUI_ProxInv_Text_ForceSelectOn": "Wymuszony wybór: WŁ.",
+    "IGUI_ProxInv_Text_ForceSelectOff": "Wymuszony wybór: WYŁ.",
+    "IGUI_ProxInv_InventoryName": "Ekw. w pobliżu",
+    "IGUI_ProxInv_Tooltip_ToggleOn": "Kliknij PPM, aby otworzyć ustawienia",
+    "IGUI_ProxInv_Tooltip_ToggleOff": "Wyłączone - Kliknij PPM, aby otworzyć ustawienia",
+    "IGUI_ProxInv_Context_ToggleOn": "Wyłącz",
+    "IGUI_ProxInv_Context_ToggleOff": "Włącz",
+    "IGUI_ProxInv_Context_ForceSelectOn": "Wyłącz wymuszony wybór",
+    "IGUI_ProxInv_Context_ForceSelectOff": "Włącz wymuszony wybór",
+    "IGUI_ProxInv_Context_HighlightOn": "Wyłącz podświetlenie",
+    "IGUI_ProxInv_Context_HighlightOff": "Włącz podświetlenie"
+}

@@ -1,0 +1,7 @@
+{
+    "UI_optionscreen_binding_ProximityInventory": "Nabijheidsinventaris",
+    "UI_optionscreen_binding_ProximityInventory_toggleEnabled": "'Nabijheidsinventaris' in-/uitschakelen",
+    "UI_optionscreen_binding_ProximityInventory_ToggleForceSelected": "'Geforceerde selectie' in-/uitschakelen",
+    "UI_optionscreen_binding_ProximityInventory_isHighlightEnableOption": "Markeer de containers die door de nabijheidsinventaris worden gebruikt",
+    "UI_optionscreen_binding_ProximityInventory_isEnabled": "Nabijheidsinventaris inschakelen"
+}
