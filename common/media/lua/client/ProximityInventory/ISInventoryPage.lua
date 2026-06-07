@@ -30,15 +30,27 @@ function ISInventoryPage:onBackpackRightMouseDown(x, y)
   return old_ISInventoryPage_onBackpackRightMouseDown(self, x, y)
 end
 
--- Sticky selection, handled generically: every way a container becomes selected routes
--- through selectContainer() -- clicking a tab in the UI (onBackpackClick), clicking a
--- container in the WORLD (ISInventoryTransferAction -> selectButtonForContainer), the
--- scroll wheel, and keyboard prev/next. Hooking here (instead of onBackpackMouseDown,
--- which only fires for UI tab clicks) means selecting a real container ALWAYS releases
--- the proxInv tab, no matter how the selection was made.
+-- Sticky selection, handled generically: a real container becomes the selection through
+-- selectContainer() -- clicking a tab in the UI (onBackpackClick), the scroll wheel, keyboard
+-- prev/next -- and that releases the proxInv tab.
+--
+-- EXCEPTION: looting an item from the proxInv tab makes the game re-select the item's *source*
+-- container via selectButtonForContainer() (ISInventoryTransferAction). That's not the player
+-- choosing a tab, so we must NOT release the tab then. selectButtonForContainer is only used by
+-- transfer actions / vehicle doors (never by genuine tab/world clicks), so we flag those calls and
+-- skip the sticky update while one is in progress.
+local old_ISInventoryPage_selectButtonForContainer = ISInventoryPage.selectButtonForContainer
+function ISInventoryPage:selectButtonForContainer(container)
+  self._proxInvProgrammatic = true
+  local ok, ret = pcall(old_ISInventoryPage_selectButtonForContainer, self, container)
+  self._proxInvProgrammatic = false
+  if not ok then error(ret) end
+  return ret
+end
+
 local old_ISInventoryPage_selectContainer = ISInventoryPage.selectContainer
 function ISInventoryPage:selectContainer(button)
-  if button and button.inventory then
+  if button and button.inventory and not self._proxInvProgrammatic then
     local playerNum = self.player or 0
     ProximityInventory.stickSelected[playerNum] =
       (button.inventory:getType() == "proxInv") or nil

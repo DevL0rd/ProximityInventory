@@ -203,6 +203,9 @@ function ProximityInventory.OnButtonsAdded(invSelf)
   if not proximityButtonRef then return end -- something must have gone wrong if this returns here
 
   -- Add all nearby containers except virtual ones (proxInv itself, CleanUI's local, etc.)
+  -- Also track whether any *real* container is nearby: the floor (always present) and synthetic
+  -- safehouse tabs don't count.
+  local realNearby = false
   for i = 1, #invSelf.backpacks do
     local invToAdd = invSelf.backpacks[i].inventory
     local containerType = invToAdd:getType()
@@ -214,6 +217,18 @@ function ProximityInventory.OnButtonsAdded(invSelf)
       local items = invToAdd:getItems()
       proximityButtonRef.inventory:getItems():addAll(items)
     end
+
+    if containerType ~= "proxInv" and containerType ~= "local" and containerType ~= "floor"
+      and containerType ~= "safehouseInv" and containerType ~= "safehouseInvZone"
+    then
+      realNearby = true
+    end
+  end
+
+  -- Nothing real around -> lock the proxInv tab in as if the player clicked it, so it holds the
+  -- selection once containers reappear (instead of just being the passive fallback).
+  if not realNearby then
+    ProximityInventory.stickSelected[playerNum] = true
   end
 end
 

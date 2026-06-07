@@ -14,6 +14,8 @@ Loot like a vacuum cleaner — one tab that scoops up every container around you
 [list]
 [*][b]One tab, everything nearby.[/b] All the containers in reach, merged into a single inventory.
 [*][b]Stays put.[/b] The tab keeps itself selected as you move and glance at other containers — it only switches when you actually click a different one. (This fork drops the old force-select pin.)
+[*][b]Loot without losing it.[/b] Grabbing items straight out of the tab no longer kicks you back to the container they came from — keep raking loot from one list.
+[*][b]Snaps back when you wander off.[/b] Walk away from everything and it locks onto the proximity tab again, ready for the next pile (the floor doesn't count, so it won't be fooled).
 [*][b]Spot the source.[/b] Optional highlighting of the real containers a nearby item is sitting in.
 [/list]
 
