@@ -117,8 +117,8 @@ if not BaseInv._init then
         return nil
     end
 
-    function BaseInv.returnDropped(page, fallbackFn)
-        local playerObj = getSpecificPlayer(page.player)
+    function BaseInv.returnDropped(playerNum, fallbackFn)
+        local playerObj = getSpecificPlayer(playerNum)
         pcall(function()
             if not playerObj or not ISMouseDrag.dragging then return end
             local dragging = ISInventoryPane.getActualItems(ISMouseDrag.dragging)
@@ -126,18 +126,37 @@ if not BaseInv._init then
             local groups, order = {}, {}
             for _, item in ipairs(dragging) do
                 local md = item.getModData and item:getModData()
-                local target = BaseInv.findOriginContainer(md and md.BaseInv_origin) or (fallbackFn and fallbackFn(playerObj, page))
+                local target = BaseInv.findOriginContainer(md and md.BaseInv_origin) or (fallbackFn and fallbackFn(playerObj))
                 if target and target:getParent() then
                     if not groups[target] then groups[target] = {}; order[#order + 1] = target end
                     table.insert(groups[target], item)
                 end
             end
-            for _, target in ipairs(order) do
-                if luautils.walkAdjObject(playerObj, target:getParent(), true, true) then
+            -- Visit the destination crates as a nearest-neighbour route from where we stand, penalising
+            -- other floors so we finish our own floor before trekking up/down the stairs (the walk itself
+            -- still pathfinds fine). keepActions=true appends each walk so the legs don't wipe each other.
+            local FLOOR_PENALTY = 50
+            local curX, curY, curZ = playerObj:getX(), playerObj:getY(), math.floor(playerObj:getZ())
+            while #order > 0 do
+                local bestIdx, bestD = 1, math.huge
+                for idx = 1, #order do
+                    local o = order[idx]:getParent()
+                    local sq = o and o.getSquare and o:getSquare()
+                    local tx, ty, tz = curX, curY, curZ
+                    if sq then tx, ty, tz = sq:getX(), sq:getY(), sq:getZ() end
+                    local dx, dy = tx - curX, ty - curY
+                    local d = math.sqrt(dx * dx + dy * dy) + math.abs(tz - curZ) * FLOOR_PENALTY
+                    if d < bestD then bestD = d; bestIdx = idx end
+                end
+                local target = table.remove(order, bestIdx)
+                local o = target:getParent()
+                local sq = o and o.getSquare and o:getSquare()
+                if luautils.walkAdjObject(playerObj, o, true, true) then
                     for _, item in ipairs(groups[target]) do
                         ISTimedActionQueue.add(ISInventoryTransferAction:new(playerObj, item, item:getContainer(), target, nil))
                     end
                 end
+                if sq then curX, curY, curZ = sq:getX(), sq:getY(), sq:getZ() end
             end
         end)
         if ISMouseDrag.draggingFocus then
@@ -145,7 +164,6 @@ if not BaseInv._init then
             ISMouseDrag.draggingFocus = nil
         end
         ISMouseDrag.dragging = nil
-        pcall(function() page.inventoryPane.selected = {} end)
         return true
     end
 
@@ -168,13 +186,38 @@ if not BaseInv._init then
             return _origTAPerform(self)
         end
     end
+
+    -- Auto-walk to a far source crate when TAKING items out (covers drag, double-click, multi-select).
+    -- A normal transfer only reaches containers within ~2.5 tiles, so taking from a distant crate
+    -- silently fails. Here we queue a walk to the crate before the transfer is queued; once the player
+    -- is adjacent the crate becomes reachable and the transfer goes through.
+    if not BaseInv._takeWalkPatched and ISInventoryTransferAction then
+        BaseInv._takeWalkPatched = true
+        local _origTANew = ISInventoryTransferAction.new
+        function ISInventoryTransferAction.new(class, character, item, srcContainer, destContainer, ...)
+            pcall(function()
+                if character and item and destContainer and character.getInventory
+                    and destContainer:getOutermostContainer() == character:getInventory() then
+                    local cont = item.getContainer and item:getContainer()
+                    local obj = cont and cont:getParent()
+                    local sq = obj and obj.getSquare and obj:getSquare()
+                    if sq and sq:DistToProper(character) > 2.0 then
+                        luautils.walkAdjObject(character, obj, true, true)
+                    end
+                end
+            end)
+            return _origTANew(class, character, item, srcContainer, destContainer, ...)
+        end
+    end
 end
 
 -- Drop onto the Proximity Inventory tab -> send items home (origin crate, else nearest nearby crate).
-local function ProxInv_nearest(playerObj, page)
+local function ProxInv_nearest(playerObj)
+    local page = getPlayerLoot and getPlayerLoot(playerObj:getPlayerNum())
+    local backpacks = (page and page.backpacks) or {}
     local best, bestD = nil, math.huge
-    for i = 1, #(page.backpacks or {}) do
-        local c = page.backpacks[i].inventory
+    for i = 1, #backpacks do
+        local c = backpacks[i].inventory
         local t = c and c:getType()
         if c and t ~= "proxInv" and t ~= "floor" and t ~= "safehouseInv" and t ~= "safehouseInvZone" then
             local o = c:getParent()
@@ -192,7 +235,20 @@ local old_ISInventoryPage_dropItemsInContainer = ISInventoryPage.dropItemsInCont
 function ISInventoryPage:dropItemsInContainer(button)
     if ProximityInventory.isEnabled:getValue() and ISMouseDrag.dragging and button and button.inventory
         and button.inventory:getType() == "proxInv" then
-        return BaseInv.returnDropped(self, ProxInv_nearest)
+        return BaseInv.returnDropped(self.player, ProxInv_nearest)
     end
     return old_ISInventoryPage_dropItemsInContainer(self, button)
+end
+
+-- Also catch dropping onto the item LIST (the pane), not just the tab icon.
+local old_ISInventoryPane_onMouseUp = ISInventoryPane.onMouseUp
+function ISInventoryPane:onMouseUp(x, y)
+    if ProximityInventory.isEnabled:getValue() and ISMouseDrag.dragging ~= nil and ISMouseDrag.draggingFocus ~= self
+        and ISMouseDrag.draggingFocus ~= nil and self.inventory and self.inventory:getType() == "proxInv" then
+        BaseInv.returnDropped(self.player, ProxInv_nearest)
+        self.selected = {}
+        self.draggingMarquis = false
+        return true
+    end
+    return old_ISInventoryPane_onMouseUp(self, x, y)
 end
