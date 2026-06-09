@@ -227,7 +227,10 @@ function ProximityInventory.OnButtonsAdded(invSelf)
 
   -- Nothing real around -> lock the proxInv tab in as if the player clicked it, so it holds the
   -- selection once containers reappear (instead of just being the passive fallback).
-  if not realNearby then
+  -- Skip this during an item transfer: the transfer refreshes every tick while the player turns to
+  -- face the container, and the nearby set can briefly read empty. Latching here would wrongly snap
+  -- you back to proxInv after looting from a container you'd selected manually.
+  if not realNearby and not invSelf._proxInvProgrammatic then
     ProximityInventory.stickSelected[playerNum] = true
   end
 end
