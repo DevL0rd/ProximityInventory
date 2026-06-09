@@ -1,13 +1,16 @@
 {
-    "IGUI_ProxInv_Text_ForceSelectOn": "Geforceerde selectie: AAN",
-    "IGUI_ProxInv_Text_ForceSelectOff": "Geforceerde selectie: UIT",
-    "IGUI_ProxInv_InventoryName": "Nabijheidsinv.",
-    "IGUI_ProxInv_Tooltip_ToggleOn": "Rechtsklik voor instellingen",
-    "IGUI_ProxInv_Tooltip_ToggleOff": "Uitgeschakeld - Rechtsklik voor instellingen",
-    "IGUI_ProxInv_Context_ToggleOn": "Uitschakelen",
-    "IGUI_ProxInv_Context_ToggleOff": "Inschakelen",
-    "IGUI_ProxInv_Context_ForceSelectOn": "Geforceerde selectie uitschakelen",
-    "IGUI_ProxInv_Context_ForceSelectOff": "Geforceerde selectie inschakelen",
-    "IGUI_ProxInv_Context_HighlightOn": "Markering uitschakelen",
-    "IGUI_ProxInv_Context_HighlightOff": "Markering inschakelen"
+  "IGUI_ProxInv_Text_ForceSelectOn": "Geforceerde selectie: AAN",
+  "IGUI_ProxInv_Text_ForceSelectOff": "Geforceerde selectie: UIT",
+  "IGUI_ProxInv_InventoryName": "Nabijheidsinv.",
+  "IGUI_ProxInv_Tooltip_ToggleOn": "Rechtsklik voor instellingen",
+  "IGUI_ProxInv_Tooltip_ToggleOff": "Uitgeschakeld - Rechtsklik voor instellingen",
+  "IGUI_ProxInv_Context_ToggleOn": "Uitschakelen",
+  "IGUI_ProxInv_Context_ToggleOff": "Inschakelen",
+  "IGUI_ProxInv_Context_ForceSelectOn": "Geforceerde selectie uitschakelen",
+  "IGUI_ProxInv_Context_ForceSelectOff": "Geforceerde selectie inschakelen",
+  "IGUI_ProxInv_Context_HighlightOn": "Markering uitschakelen",
+  "IGUI_ProxInv_Context_HighlightOff": "Markering inschakelen",
+  "IGUI_ProxInv_Context_ForgetOrigins": "Vergeten waar items vandaan kwamen",
+  "UI_BaseInv_KeptNoRoom": "Geen ruimte voor %1 item(s) — behouden",
+  "UI_BaseInv_KeptNoMatch": "Geen plek voor %1 item(s) — behouden"
 }

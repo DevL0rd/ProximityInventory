@@ -1,13 +1,16 @@
 {
-    "IGUI_ProxInv_Text_ForceSelectOn": "Zorla Seçim: AÇIK",
-    "IGUI_ProxInv_Text_ForceSelectOff": "Zorla Seçim: KAPALI",
-    "IGUI_ProxInv_InventoryName": "Yakınlık Env.",
-    "IGUI_ProxInv_Tooltip_ToggleOn": "Ayarlar için sağ tıkla",
-    "IGUI_ProxInv_Tooltip_ToggleOff": "Devre dışı - Ayarlar için sağ tıkla",
-    "IGUI_ProxInv_Context_ToggleOn": "Kapat",
-    "IGUI_ProxInv_Context_ToggleOff": "Aç",
-    "IGUI_ProxInv_Context_ForceSelectOn": "Zorla seçimi devre dışı bırak",
-    "IGUI_ProxInv_Context_ForceSelectOff": "Zorla seçimi etkinleştir",
-    "IGUI_ProxInv_Context_HighlightOn": "Vurgulamayı devre dışı bırak",
-    "IGUI_ProxInv_Context_HighlightOff": "Vurgulamayı etkinleştir"
+  "IGUI_ProxInv_Text_ForceSelectOn": "Zorla Seçim: AÇIK",
+  "IGUI_ProxInv_Text_ForceSelectOff": "Zorla Seçim: KAPALI",
+  "IGUI_ProxInv_InventoryName": "Yakınlık Env.",
+  "IGUI_ProxInv_Tooltip_ToggleOn": "Ayarlar için sağ tıkla",
+  "IGUI_ProxInv_Tooltip_ToggleOff": "Devre dışı - Ayarlar için sağ tıkla",
+  "IGUI_ProxInv_Context_ToggleOn": "Kapat",
+  "IGUI_ProxInv_Context_ToggleOff": "Aç",
+  "IGUI_ProxInv_Context_ForceSelectOn": "Zorla seçimi devre dışı bırak",
+  "IGUI_ProxInv_Context_ForceSelectOff": "Zorla seçimi etkinleştir",
+  "IGUI_ProxInv_Context_HighlightOn": "Vurgulamayı devre dışı bırak",
+  "IGUI_ProxInv_Context_HighlightOff": "Vurgulamayı etkinleştir",
+  "IGUI_ProxInv_Context_ForgetOrigins": "Eşyaların nereden geldiğini unut",
+  "UI_BaseInv_KeptNoRoom": "%1 eşya için yer yok — üzerinde kaldı",
+  "UI_BaseInv_KeptNoMatch": "%1 eşya için uygun yer yok — üzerinde kaldı"
 }

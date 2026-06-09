@@ -139,20 +139,90 @@ if not BaseInv._init then
         return n
     end
 
-    function BaseInv.returnDropped(playerNum, fallbackFn)
+    -- Build an ordered list of candidate destination containers for a returned item, best first:
+    --   1) its origin container, if still in scope;
+    --   2) in-scope containers already holding the same item TYPE, nearest first;
+    --   3) in-scope containers holding the same CATEGORY, the one with the most of that category first.
+    -- returnDropped then takes the first that can fit the item within its weight capacity. `conts` is the
+    -- mod's current in-scope set; the floor is never a target.
+    function BaseInv.buildReturnCandidates(playerObj, item, origin, conts)
+        local out, seen = {}, {}
+        local function push(c)
+            if c and not seen[c] and c.getType and c:getType() ~= "floor" and c.getParent and c:getParent() then
+                seen[c] = true; out[#out + 1] = c
+            end
+        end
+        local oc = BaseInv.findOriginContainer(origin)
+        if oc then
+            for _, c in ipairs(conts or {}) do if c == oc then push(c); break end end
+        end
+        local ft = item:getFullType()
+        local cat = item.getCategory and item:getCategory()
+        local typeM, catM = {}, {}
+        for _, c in ipairs(conts or {}) do
+            if c and not seen[c] and c:getType() ~= "floor" then
+                local o = c:getParent()
+                local sq = o and o.getSquare and o:getSquare()
+                if sq then
+                    local its = c:getItems()
+                    local tc, cc = 0, 0
+                    for i = 0, its:size() - 1 do
+                        local it2 = its:get(i)
+                        if it2 then
+                            if it2:getFullType() == ft then tc = tc + 1 end
+                            if cat and it2.getCategory and it2:getCategory() == cat then cc = cc + 1 end
+                        end
+                    end
+                    if tc > 0 then typeM[#typeM + 1] = { c = c, d = sq:DistToProper(playerObj) } end
+                    if cc > 0 then catM[#catM + 1] = { c = c, n = cc } end
+                end
+            end
+        end
+        table.sort(typeM, function(a, b) return a.d < b.d end)
+        for _, m in ipairs(typeM) do push(m.c) end
+        table.sort(catM, function(a, b) return a.n > b.n end)
+        for _, m in ipairs(catM) do push(m.c) end
+        return out
+    end
+
+    -- Send the currently-dragged items home. resolveFn(playerObj, item, origin) returns an ordered list
+    -- of candidate containers; we take the first that fits the item within its weight capacity (tracking
+    -- the weight committed to each container across the whole drag), else leave the item put. Returns
+    -- true (the drop is handled); mirrors vanilla drag-state cleanup.
+    function BaseInv.returnDropped(playerNum, resolveFn)
         local playerObj = getSpecificPlayer(playerNum)
         pcall(function()
             if not playerObj or not ISMouseDrag.dragging then return end
             local dragging = ISInventoryPane.getActualItems(ISMouseDrag.dragging)
             if not dragging then return end
             local groups, order = {}, {}
+            local committed = {}            -- container -> weight already assigned this drag
+            local skipNoRoom, skipNoMatch = 0, 0
             for _, item in ipairs(dragging) do
                 local md = item.getModData and item:getModData()
-                local target = BaseInv.findOriginContainer(md and md.BaseInv_origin) or (fallbackFn and fallbackFn(playerObj, item))
-                if target and target:getParent() then
+                local candidates = (resolveFn and resolveFn(playerObj, item, md and md.BaseInv_origin)) or {}
+                local w = (item.getUnequippedWeight and item:getUnequippedWeight()) or 0
+                -- take the first candidate that can still fit this item (counting what we've already
+                -- promised it this drag); when a container fills up the rest flow to the next candidate
+                local target = nil
+                for _, c in ipairs(candidates) do
+                    local already = committed[c] or 0
+                    if c.hasRoomFor and c:hasRoomFor(playerObj, already + w) then
+                        target = c; committed[c] = already + w; break
+                    end
+                end
+                if target then
                     if not groups[target] then groups[target] = {}; order[#order + 1] = target end
                     table.insert(groups[target], item)
+                elseif #candidates > 0 then
+                    skipNoRoom = skipNoRoom + 1   -- somewhere matched but everything was full
+                else
+                    skipNoMatch = skipNoMatch + 1 -- nothing in scope to put it in
                 end
+            end
+            if HaloTextHelper and playerObj then
+                if skipNoRoom > 0 then HaloTextHelper.addBadText(playerObj, getText("UI_BaseInv_KeptNoRoom", skipNoRoom)) end
+                if skipNoMatch > 0 then HaloTextHelper.addBadText(playerObj, getText("UI_BaseInv_KeptNoMatch", skipNoMatch)) end
             end
             -- Visit the destination crates as a nearest-neighbour route from where we stand, penalising
             -- other floors so we finish our own floor before trekking up/down the stairs (the walk itself
@@ -382,36 +452,22 @@ end
 BaseInv.homeTypePredicates = BaseInv.homeTypePredicates or {}
 table.insert(BaseInv.homeTypePredicates, function(t) return t == "proxInv" end)
 
--- Fallback target for an item with no remembered origin: the nearest nearby container that ALREADY
--- holds the same item type, so it stacks with its kind. Returns nil if nothing nearby has a match --
--- returnDropped then leaves that item in your inventory rather than dumping it somewhere arbitrary.
-local function ProxInv_nearest(playerObj, item)
-    if not item then return nil end
-    local ft = item:getFullType()
+-- Candidate destinations for a returned item, scoped to the containers nearby right now -- never
+-- somewhere off across the loaded map. Tiering (origin / same type / same category) and weight handling
+-- live in BaseInv.buildReturnCandidates.
+local function ProxInv_nearest(playerObj, item, origin)
+    if not item then return {} end
     local page = getPlayerLoot and getPlayerLoot(playerObj:getPlayerNum())
     local backpacks = (page and page.backpacks) or {}
-    local best, bestD = nil, math.huge
+    local nearby = {}
     for i = 1, #backpacks do
         local c = backpacks[i].inventory
         local t = c and c:getType()
         if c and t ~= "proxInv" and t ~= "floor" and t ~= "safehouseInv" and t ~= "safehouseInvZone" then
-            local o = c:getParent()
-            local sq = o and o.getSquare and o:getSquare()
-            if sq then
-                local its = c:getItems()
-                local match = false
-                for j = 0, its:size() - 1 do
-                    local it2 = its:get(j)
-                    if it2 and it2:getFullType() == ft then match = true; break end
-                end
-                if match then
-                    local d = sq:DistToProper(playerObj)
-                    if d < bestD then bestD = d; best = c end
-                end
-            end
+            nearby[#nearby + 1] = c
         end
     end
-    return best
+    return BaseInv.buildReturnCandidates(playerObj, item, origin, nearby)
 end
 
 local old_ISInventoryPage_dropItemsInContainer = ISInventoryPage.dropItemsInContainer

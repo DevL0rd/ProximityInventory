@@ -1,13 +1,16 @@
 {
-    "IGUI_ProxInv_Text_ForceSelectOn": "強制選択: オン",
-    "IGUI_ProxInv_Text_ForceSelectOff": "強制選択: オフ",
-    "IGUI_ProxInv_InventoryName": "近接インベントリ",
-    "IGUI_ProxInv_Tooltip_ToggleOn": "右クリックで設定",
-    "IGUI_ProxInv_Tooltip_ToggleOff": "無効 - 右クリックで設定",
-    "IGUI_ProxInv_Context_ToggleOn": "オフにする",
-    "IGUI_ProxInv_Context_ToggleOff": "オンにする",
-    "IGUI_ProxInv_Context_ForceSelectOn": "強制選択を無効にする",
-    "IGUI_ProxInv_Context_ForceSelectOff": "強制選択を有効にする",
-    "IGUI_ProxInv_Context_HighlightOn": "強調表示を無効にする",
-    "IGUI_ProxInv_Context_HighlightOff": "強調表示を有効にする"
+  "IGUI_ProxInv_Text_ForceSelectOn": "強制選択: オン",
+  "IGUI_ProxInv_Text_ForceSelectOff": "強制選択: オフ",
+  "IGUI_ProxInv_InventoryName": "近接インベントリ",
+  "IGUI_ProxInv_Tooltip_ToggleOn": "右クリックで設定",
+  "IGUI_ProxInv_Tooltip_ToggleOff": "無効 - 右クリックで設定",
+  "IGUI_ProxInv_Context_ToggleOn": "オフにする",
+  "IGUI_ProxInv_Context_ToggleOff": "オンにする",
+  "IGUI_ProxInv_Context_ForceSelectOn": "強制選択を無効にする",
+  "IGUI_ProxInv_Context_ForceSelectOff": "強制選択を有効にする",
+  "IGUI_ProxInv_Context_HighlightOn": "強調表示を無効にする",
+  "IGUI_ProxInv_Context_HighlightOff": "強調表示を有効にする",
+  "IGUI_ProxInv_Context_ForgetOrigins": "アイテムの戻し先を忘れる",
+  "UI_BaseInv_KeptNoRoom": "%1個分の空きがありません — 手持ちのまま",
+  "UI_BaseInv_KeptNoMatch": "%1個の置き場所が見つかりません — 手持ちのまま"
 }
