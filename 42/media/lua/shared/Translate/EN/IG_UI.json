@@ -9,5 +9,6 @@
     "IGUI_ProxInv_Context_ForceSelectOn": "Disable Force Selected",
     "IGUI_ProxInv_Context_ForceSelectOff": "Enable Force Selected",
     "IGUI_ProxInv_Context_HighlightOn": "Disable Highlight",
-    "IGUI_ProxInv_Context_HighlightOff": "Enable Highlight"
+    "IGUI_ProxInv_Context_HighlightOff": "Enable Highlight",
+    "IGUI_ProxInv_Context_ForgetOrigins": "Forget where items came from"
 }

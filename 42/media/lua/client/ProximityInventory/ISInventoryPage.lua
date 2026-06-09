@@ -24,6 +24,11 @@ function ISInventoryPage:onBackpackRightMouseDown(x, y)
     end)
     optHighlight.iconTexture = isHighlight and highlightIcon or nil
 
+    context:addOption(getText("IGUI_ProxInv_Context_ForgetOrigins"), nil, function()
+      local playerObj = getSpecificPlayer(playerNum)
+      BaseInv.forgetOrigins({ container, playerObj and playerObj:getInventory() })
+    end)
+
     return
   end
 
@@ -117,6 +122,23 @@ if not BaseInv._init then
         return nil
     end
 
+    -- Strip the remembered origin from every item in the given containers. Backs the "forget origins"
+    -- tab option, for when you reorganise storage and don't want items routing back to where they were.
+    function BaseInv.forgetOrigins(containers)
+        local n = 0
+        for _, c in ipairs(containers or {}) do
+            local its = c and c.getItems and c:getItems()
+            if its then
+                for i = 0, its:size() - 1 do
+                    local it = its:get(i)
+                    local md = it and it.getModData and it:getModData()
+                    if md and md.BaseInv_origin ~= nil then md.BaseInv_origin = nil; n = n + 1 end
+                end
+            end
+        end
+        return n
+    end
+
     function BaseInv.returnDropped(playerNum, fallbackFn)
         local playerObj = getSpecificPlayer(playerNum)
         pcall(function()
@@ -126,7 +148,7 @@ if not BaseInv._init then
             local groups, order = {}, {}
             for _, item in ipairs(dragging) do
                 local md = item.getModData and item:getModData()
-                local target = BaseInv.findOriginContainer(md and md.BaseInv_origin) or (fallbackFn and fallbackFn(playerObj))
+                local target = BaseInv.findOriginContainer(md and md.BaseInv_origin) or (fallbackFn and fallbackFn(playerObj, item))
                 if target and target:getParent() then
                     if not groups[target] then groups[target] = {}; order[#order + 1] = target end
                     table.insert(groups[target], item)
@@ -360,8 +382,12 @@ end
 BaseInv.homeTypePredicates = BaseInv.homeTypePredicates or {}
 table.insert(BaseInv.homeTypePredicates, function(t) return t == "proxInv" end)
 
--- Drop onto the Proximity Inventory tab -> send items home (origin crate, else nearest nearby crate).
-local function ProxInv_nearest(playerObj)
+-- Fallback target for an item with no remembered origin: the nearest nearby container that ALREADY
+-- holds the same item type, so it stacks with its kind. Returns nil if nothing nearby has a match --
+-- returnDropped then leaves that item in your inventory rather than dumping it somewhere arbitrary.
+local function ProxInv_nearest(playerObj, item)
+    if not item then return nil end
+    local ft = item:getFullType()
     local page = getPlayerLoot and getPlayerLoot(playerObj:getPlayerNum())
     local backpacks = (page and page.backpacks) or {}
     local best, bestD = nil, math.huge
@@ -372,8 +398,16 @@ local function ProxInv_nearest(playerObj)
             local o = c:getParent()
             local sq = o and o.getSquare and o:getSquare()
             if sq then
-                local d = sq:DistToProper(playerObj)
-                if d < bestD then bestD = d; best = c end
+                local its = c:getItems()
+                local match = false
+                for j = 0, its:size() - 1 do
+                    local it2 = its:get(j)
+                    if it2 and it2:getFullType() == ft then match = true; break end
+                end
+                if match then
+                    local d = sq:DistToProper(playerObj)
+                    if d < bestD then bestD = d; best = c end
+                end
             end
         end
     end
