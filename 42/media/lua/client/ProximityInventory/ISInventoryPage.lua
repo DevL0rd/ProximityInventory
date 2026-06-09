@@ -222,13 +222,15 @@ if not BaseInv._init then
         if not (playerObj and plan) or #plan == 0 then return end
         local inv = playerObj:getInventory()
         BaseInv._managing = true  -- suppress the per-take auto-walk wrap; we do our own walking here
-        -- Phase 1: fetch everything not already in the player's inventory.
-        local fg, fo = {}, {}
+        -- Phase 1: fetch everything stored in a remote container (not carried on the player) into the
+        -- inventory. Items already in your inventory or bags are left where they are.
+        local fg, fo, fetched = {}, {}, {}
         for _, p in ipairs(plan) do
             local src = p.item.getContainer and p.item:getContainer()
             if src and src ~= inv and src:getOutermostContainer() ~= inv then
                 if not fg[src] then fg[src] = {}; fo[#fo + 1] = src end
                 table.insert(fg[src], p.item)
+                fetched[p.item] = true
             end
         end
         BaseInv.routeContainers(playerObj, fo)
@@ -253,7 +255,11 @@ if not BaseInv._init then
             local o = T:getParent()
             if (not o) or luautils.walkAdjObject(playerObj, o, true, true) then
                 for _, item in ipairs(dg[T]) do
-                    ISTimedActionQueue.add(ISInventoryTransferAction:new(playerObj, item, inv, T, nil))
+                    -- fetched items are now in the inventory; everything else transfers straight from
+                    -- wherever it already sits (main inventory OR a bag). Forcing the main inventory as
+                    -- the source broke items kept in a backpack -- the transfer went invalid.
+                    local srcC = fetched[item] and inv or item:getContainer()
+                    ISTimedActionQueue.add(ISInventoryTransferAction:new(playerObj, item, srcC, T, nil))
                 end
             end
         end
