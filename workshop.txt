@@ -17,6 +17,7 @@ Loot like a vacuum cleaner — one tab that scoops up every container around you
 [*][b]Loot without losing it.[/b] Grab items straight from the tab and stay right where you are.
 [*][b]Snaps back when you wander off.[/b] Walk away from everything and it locks onto the proximity tab again, ready for the next pile.
 [*][b]Spot the source.[/b] Optional highlighting of the containers a nearby item is in.
+[*][b]Put it back where it came from.[/b] Drag an item onto the tab and it's returned to the exact container you grabbed it from.
 [/list]
 
 [h2]Why you'll like it[/h2]

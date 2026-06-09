@@ -95,3 +95,104 @@ function ISInventoryPage:update()
     end
   end
 end
+
+-- ── BaseInv: remember where items came from, send them home on drag-back ─────────────
+-- Shared between Proximity Inventory and Safehouse Inventory (same modData key + helpers). Defined
+-- once; whichever mod loads first sets it up, the other reuses it.
+BaseInv = BaseInv or {}
+if not BaseInv._init then
+    BaseInv._init = true
+
+    function BaseInv.findOriginContainer(origin)
+        if not (origin and origin.x) then return nil end
+        local cell = getCell()
+        local sq = cell and cell:getGridSquare(origin.x, origin.y, origin.z)
+        if not sq then return nil end
+        local objs = sq:getObjects()
+        for i = 0, objs:size() - 1 do
+            local o = objs:get(i)
+            local c = o and o:getContainer()
+            if c and (not origin.type or c:getType() == origin.type) then return c end
+        end
+        return nil
+    end
+
+    function BaseInv.returnDropped(page, fallbackFn)
+        local playerObj = getSpecificPlayer(page.player)
+        pcall(function()
+            if not playerObj or not ISMouseDrag.dragging then return end
+            local dragging = ISInventoryPane.getActualItems(ISMouseDrag.dragging)
+            if not dragging then return end
+            local groups, order = {}, {}
+            for _, item in ipairs(dragging) do
+                local md = item.getModData and item:getModData()
+                local target = BaseInv.findOriginContainer(md and md.BaseInv_origin) or (fallbackFn and fallbackFn(playerObj, page))
+                if target and target:getParent() then
+                    if not groups[target] then groups[target] = {}; order[#order + 1] = target end
+                    table.insert(groups[target], item)
+                end
+            end
+            for _, target in ipairs(order) do
+                if luautils.walkAdjObject(playerObj, target:getParent(), true, true) then
+                    for _, item in ipairs(groups[target]) do
+                        ISTimedActionQueue.add(ISInventoryTransferAction:new(playerObj, item, item:getContainer(), target, nil))
+                    end
+                end
+            end
+        end)
+        if ISMouseDrag.draggingFocus then
+            ISMouseDrag.draggingFocus:onMouseUp(0, 0)
+            ISMouseDrag.draggingFocus = nil
+        end
+        ISMouseDrag.dragging = nil
+        pcall(function() page.inventoryPane.selected = {} end)
+        return true
+    end
+
+    if not BaseInv._stampPatched and ISInventoryTransferAction then
+        BaseInv._stampPatched = true
+        local _origTAPerform = ISInventoryTransferAction.perform
+        function ISInventoryTransferAction:perform()
+            pcall(function()
+                local it = self.item
+                local cont = it and it:getContainer()
+                if it and cont and self.character and self.destContainer
+                    and self.destContainer:getOutermostContainer() == self.character:getInventory() then
+                    local obj = cont:getParent()
+                    local sq = obj and obj.getSquare and obj:getSquare()
+                    if sq then
+                        it:getModData().BaseInv_origin = { x = sq:getX(), y = sq:getY(), z = sq:getZ(), type = cont:getType() }
+                    end
+                end
+            end)
+            return _origTAPerform(self)
+        end
+    end
+end
+
+-- Drop onto the Proximity Inventory tab -> send items home (origin crate, else nearest nearby crate).
+local function ProxInv_nearest(playerObj, page)
+    local best, bestD = nil, math.huge
+    for i = 1, #(page.backpacks or {}) do
+        local c = page.backpacks[i].inventory
+        local t = c and c:getType()
+        if c and t ~= "proxInv" and t ~= "floor" and t ~= "safehouseInv" and t ~= "safehouseInvZone" then
+            local o = c:getParent()
+            local sq = o and o.getSquare and o:getSquare()
+            if sq then
+                local d = sq:DistToProper(playerObj)
+                if d < bestD then bestD = d; best = c end
+            end
+        end
+    end
+    return best
+end
+
+local old_ISInventoryPage_dropItemsInContainer = ISInventoryPage.dropItemsInContainer
+function ISInventoryPage:dropItemsInContainer(button)
+    if ProximityInventory.isEnabled:getValue() and ISMouseDrag.dragging and button and button.inventory
+        and button.inventory:getType() == "proxInv" then
+        return BaseInv.returnDropped(self, ProxInv_nearest)
+    end
+    return old_ISInventoryPage_dropItemsInContainer(self, button)
+end
